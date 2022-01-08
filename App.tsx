@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, SafeAreaView, FlatList, View } from 'react-native';
+import { mockData } from './src/Friend';
+import { FriendRow } from './src/FriendRow';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    const [friends, setFriends] = useState(mockData);
+
+    return (
+        <SafeAreaView style={styles.root}>
+            <View style={styles.listContainer}>
+                <FlatList
+                    data={friends.sort(
+                        (a, b) => b.periodsElapsed - a.periodsElapsed
+                    )}
+                    renderItem={({ item }) => FriendRow({ friend: item })}
+                />
+                <View style={styles.spacer} />
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    listContainer: {
+        display: 'flex',
+        flex: 1,
+    },
+    spacer: {
+        flex: 1,
+    },
 });

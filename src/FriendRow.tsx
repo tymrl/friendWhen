@@ -58,7 +58,7 @@ export const FriendRow = (props: FriendRowProps) => {
     row: {
       flex: 1,
       flexDirection: "row",
-      backgroundColor: rowColor(props.friend.periodsElapsed),
+      backgroundColor: rowColor(props.friend.periodsElapsed()),
       padding: 12,
     },
     friendName: {
@@ -71,10 +71,14 @@ export const FriendRow = (props: FriendRowProps) => {
   });
 
   const updateLastSeen = () => {
-    const updatedFriend = { ...props.friend };
-    updatedFriend.lastSeen = moment();
-    updatedFriend.periodsElapsed = 0;
-    props.updateFriend(updatedFriend);
+    props.updateFriend(
+      new Friend(
+        props.friend.name,
+        props.friend.id,
+        moment().toISOString(),
+        props.friend.daysPerContact
+      )
+    );
   };
 
   return (

@@ -79,11 +79,12 @@ export const FriendRow = (props: FriendRowProps) => {
 
   return (
     <Swipeable
+      key={props.friend.id}
       renderLeftActions={LeftActions}
       //   onSwipeableLeftOpen={markAsCompleted}
       //   ref={ref}
     >
-      <View key={props.friend.id} style={styles.row}>
+      <View style={styles.row}>
         <Text style={styles.friendName}>{props.friend.name}</Text>
         <Text style={styles.lastSeenDate}>
           {props.friend.lastSeen.format("MMM D")}

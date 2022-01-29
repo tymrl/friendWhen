@@ -73,6 +73,7 @@ export const FriendRow = (props: FriendRowProps) => {
   const updateLastSeen = () => {
     const updatedFriend = { ...props.friend };
     updatedFriend.lastSeen = moment();
+    updatedFriend.periodsElapsed = 0;
     props.updateFriend(updatedFriend);
   };
 

@@ -5,7 +5,6 @@ export class Friend {
   id: string;
   lastSeen: moment.Moment;
   daysPerContact: number;
-  periodsElapsed: number;
 
   constructor(
     name: string,
@@ -17,9 +16,13 @@ export class Friend {
     this.id = id;
     this.lastSeen = moment(new Date(lastSeen));
     this.daysPerContact = daysPerContact;
-    this.periodsElapsed =
+  }
+
+  periodsElapsed() {
+    return (
       moment.duration(moment().diff(this.lastSeen)).asDays() /
-      this.daysPerContact;
+      this.daysPerContact
+    );
   }
 }
 

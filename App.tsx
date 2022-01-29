@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
-import { mockData } from "./src/Friend";
+import { Friend, mockData } from "./src/Friend";
 import { FriendRow } from "./src/FriendRow";
 
 export default function App() {
   const [friends, setFriends] = useState(mockData);
 
+  const updateFriend = (friend: Friend) => {
+    const newFriends = [...friends];
+    newFriends[newFriends.findIndex((f) => f.id === friend.id)] = friend;
+    newFriends.sort((a, b) => b.periodsElapsed() - a.periodsElapsed());
+    setFriends(newFriends);
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.listContainer}>
         <FlatList
-          data={friends.sort((a, b) => b.periodsElapsed - a.periodsElapsed)}
-          renderItem={({ item }) => FriendRow({ friend: item })}
+          data={friends.sort((a, b) => b.periodsElapsed() - a.periodsElapsed())}
+          renderItem={({ item }) => FriendRow({ friend: item, updateFriend })}
         />
         <View style={styles.spacer} />
       </View>

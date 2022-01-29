@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Appbar } from "react-native-paper";
 import { Friend, periodsElapsed, mockData } from "./src/Friend";
 import { FriendRow } from "./src/FriendRow";
 
@@ -27,6 +28,12 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.root}>
+      <Appbar style={styles.appbar}>
+        <Appbar.Action
+          icon="account-plus"
+          onPress={() => console.log("Pressed archive")}
+        />
+      </Appbar>
       <View style={styles.body}>
         <View style={styles.listContainer}>
           <FlatList
@@ -44,6 +51,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  appbar: {
+    display: "flex",
+    flexDirection: "row",
   },
   body: {
     display: "flex",

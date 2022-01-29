@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 import { Friend } from "./Friend";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import moment from "moment";
 
 const rowColor = (periodsElapsed: number): string => {
   let red: number;
@@ -49,7 +50,7 @@ const LeftActions = (progress, dragX) => {
 
 interface FriendRowProps {
   friend: Friend;
-  // updateFriend: (friend: Friend) => void
+  updateFriend: (friend: Friend) => void;
 }
 
 export const FriendRow = (props: FriendRowProps) => {
@@ -69,20 +70,17 @@ export const FriendRow = (props: FriendRowProps) => {
     },
   });
 
-  // const ref = useRef<Swipeable | null>(null);
-
-  //   const markAsCompleted = () => {
-  //     if (ref.current) {
-  //       ref.current.close();
-  //     }
-  //   };
+  const updateLastSeen = () => {
+    const updatedFriend = { ...props.friend };
+    updatedFriend.lastSeen = moment();
+    props.updateFriend(updatedFriend);
+  };
 
   return (
     <Swipeable
-      key={props.friend.id}
+      key={props.friend.lastSeen.unix()}
       renderLeftActions={LeftActions}
-      //   onSwipeableLeftOpen={markAsCompleted}
-      //   ref={ref}
+      onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>
         <Text style={styles.friendName}>{props.friend.name}</Text>

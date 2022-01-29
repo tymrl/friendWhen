@@ -27,12 +27,14 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={friends.sort((a, b) => periodsElapsed(b) - periodsElapsed(a))}
-          renderItem={({ item }) => FriendRow({ friend: item, updateFriend })}
-        />
-        <View style={styles.spacer} />
+      <View style={styles.body}>
+        <View style={styles.listContainer}>
+          <FlatList
+            data={friends.sort((a, b) => periodsElapsed(b) - periodsElapsed(a))}
+            renderItem={({ item }) => FriendRow({ friend: item, updateFriend })}
+          />
+          <View style={styles.spacer} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -40,12 +42,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: {
-    display: "flex",
-    flexDirection: "row",
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  body: {
+    display: "flex",
+    flexDirection: "row",
   },
   listContainer: {
     display: "flex",

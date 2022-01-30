@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
-import { Friend } from "./Friend";
+import { Friend, periodsElapsed } from "./Friend";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import moment from "moment";
 
@@ -22,7 +22,10 @@ const rowColor = (periodsElapsed: number): string => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-const LeftActions = (progress, dragX) => {
+const LeftActions = (
+  progress: Animated.AnimatedInterpolation,
+  dragX: Animated.AnimatedInterpolation
+) => {
   const scale = dragX.interpolate({
     inputRange: [0, 100],
     outputRange: [0, 1],
@@ -58,7 +61,7 @@ export const FriendRow = (props: FriendRowProps) => {
     row: {
       flex: 1,
       flexDirection: "row",
-      backgroundColor: rowColor(props.friend.periodsElapsed()),
+      backgroundColor: rowColor(periodsElapsed(props.friend)),
       padding: 12,
     },
     friendName: {
@@ -71,26 +74,19 @@ export const FriendRow = (props: FriendRowProps) => {
   });
 
   const updateLastSeen = () => {
-    props.updateFriend(
-      new Friend(
-        props.friend.name,
-        props.friend.id,
-        moment().toISOString(),
-        props.friend.daysPerContact
-      )
-    );
+    props.updateFriend({ ...props.friend, lastSeen: moment().toISOString() });
   };
 
   return (
     <Swipeable
-      key={props.friend.lastSeen.unix()}
+      key={props.friend.lastSeen}
       renderLeftActions={LeftActions}
       onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>
         <Text style={styles.friendName}>{props.friend.name}</Text>
         <Text style={styles.lastSeenDate}>
-          {props.friend.lastSeen.format("MMM D")}
+          {moment(props.friend.lastSeen).format("MMM D")}
         </Text>
       </View>
     </Swipeable>

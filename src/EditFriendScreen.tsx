@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
+import moment from "moment";
 
 export const EditFriendScreen = () => {
   const [name, setName] = useState("New friend");
+  const [lastSeen, setLastSeen] = useState(moment().format("MM/DD/YYYY"));
   const [daysPerContact, setDaysPerContact] = useState(30);
 
   return (
@@ -13,6 +15,15 @@ export const EditFriendScreen = () => {
         value={name}
         autoComplete="off"
         onChangeText={setName}
+      />
+      <TextInput
+        label="Last seen"
+        value={lastSeen}
+        autoComplete="off"
+        placeholder="MM/DD/YYYY"
+        onChangeText={(lastSeen) =>
+          setLastSeen(moment(lastSeen, "MM/DD/YYYY").toISOString())
+        }
       />
       <TextInput
         label="Days per contact"

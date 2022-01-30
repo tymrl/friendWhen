@@ -5,7 +5,7 @@ import { Appbar } from "react-native-paper";
 import { Friend, periodsElapsed, mockData } from "./Friend";
 import { FriendRow } from "./FriendRow";
 
-export const FriendListScreen = () => {
+export const FriendListScreen = ({ navigation }) => {
   const [friends, setFriends] = useState(mockData);
   useEffect(() => {
     const getFriends = async () => {
@@ -31,7 +31,9 @@ export const FriendListScreen = () => {
       <Appbar style={styles.appbar}>
         <Appbar.Action
           icon="account-plus"
-          onPress={() => console.log("Pressed archive")}
+          onPress={() =>
+            navigation.navigate("EditFriendScreen", { name: "Add new friend" })
+          }
         />
       </Appbar>
       <View style={styles.body}>

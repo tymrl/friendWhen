@@ -22,7 +22,10 @@ const rowColor = (periodsElapsed: number): string => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-const LeftActions = (progress, dragX) => {
+const LeftActions = (
+  progress: Animated.AnimatedInterpolation,
+  dragX: Animated.AnimatedInterpolation
+) => {
   const scale = dragX.interpolate({
     inputRange: [0, 100],
     outputRange: [0, 1],

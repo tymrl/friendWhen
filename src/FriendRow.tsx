@@ -71,19 +71,19 @@ export const FriendRow = (props: FriendRowProps) => {
   });
 
   const updateLastSeen = () => {
-    props.updateFriend({ ...props.friend, lastSeen: moment() });
+    props.updateFriend({ ...props.friend, lastSeen: moment().toISOString() });
   };
 
   return (
     <Swipeable
-      key={props.friend.lastSeen.unix()}
+      key={props.friend.lastSeen}
       renderLeftActions={LeftActions}
       onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>
         <Text style={styles.friendName}>{props.friend.name}</Text>
         <Text style={styles.lastSeenDate}>
-          {props.friend.lastSeen.format("MMM D")}
+          {moment(props.friend.lastSeen).format("MMM D")}
         </Text>
       </View>
     </Swipeable>

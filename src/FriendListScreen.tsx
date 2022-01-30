@@ -5,7 +5,7 @@ import { Appbar } from "react-native-paper";
 import { Friend, periodsElapsed, mockData } from "./Friend";
 import { FriendRow } from "./FriendRow";
 
-export const FriendList = () => {
+export const FriendListScreen = () => {
   const [friends, setFriends] = useState(mockData);
   useEffect(() => {
     const getFriends = async () => {

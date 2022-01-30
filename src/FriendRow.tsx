@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 import { Friend, periodsElapsed } from "./Friend";
 import Swipeable from "react-native-gesture-handler/Swipeable";

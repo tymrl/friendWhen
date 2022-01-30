@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
-import { Friend } from "./Friend";
+import { Friend, periodsElapsed } from "./Friend";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import moment from "moment";
 
@@ -58,7 +58,7 @@ export const FriendRow = (props: FriendRowProps) => {
     row: {
       flex: 1,
       flexDirection: "row",
-      backgroundColor: rowColor(props.friend.periodsElapsed()),
+      backgroundColor: rowColor(periodsElapsed(props.friend)),
       padding: 12,
     },
     friendName: {
@@ -71,14 +71,7 @@ export const FriendRow = (props: FriendRowProps) => {
   });
 
   const updateLastSeen = () => {
-    props.updateFriend(
-      new Friend(
-        props.friend.name,
-        props.friend.id,
-        moment().toISOString(),
-        props.friend.daysPerContact
-      )
-    );
+    props.updateFriend({ ...props.friend, lastSeen: moment() });
   };
 
   return (

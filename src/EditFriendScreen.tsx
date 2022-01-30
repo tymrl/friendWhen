@@ -1,12 +1,18 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, Text, View } from "react-native";
+import { TextInput } from "react-native-paper";
 
 export const EditFriendScreen = () => {
-  //   const [friend, setFriend] = useState(mockData);
+  const [name, setName] = useState("New friend");
 
   return (
     <SafeAreaView style={styles.root}>
-      <Text>Edit</Text>
+      <TextInput
+        label="Name"
+        value={name}
+        autoComplete="off"
+        onChangeText={setName}
+      />
     </SafeAreaView>
   );
 };

@@ -16,19 +16,17 @@ export const EditFriendScreen = ({
   const [daysPerContact, setDaysPerContact] = useState(30);
   const [friends, setFriends] = useState<Friend[]>([]);
 
-  useEffect(() => {
-    const getFriends = async () => {
-      const friendString = await AsyncStorage.getItem("friends");
-      if (friendString) {
-        setFriends(JSON.parse(friendString));
-      } else {
-        console.error(
-          "No friends data saved when navigating to EditFriendScreen"
-        );
-      }
-    };
-    getFriends().catch(console.error);
-  }, []);
+  const getFriends = async () => {
+    const friendString = await AsyncStorage.getItem("friends");
+    if (friendString) {
+      setFriends(JSON.parse(friendString));
+    } else {
+      console.error(
+        "No friends data saved when navigating to EditFriendScreen"
+      );
+    }
+  };
+  getFriends().catch(console.error);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: "Add new friend" });
@@ -38,7 +36,7 @@ export const EditFriendScreen = ({
     const newFriends = [...friends];
     newFriends.push({
       name,
-      lastSeen,
+      lastSeen: moment(lastSeen, "MM/DD/YYYY").toISOString(),
       daysPerContact,
       id: makeFriendId(),
     });
@@ -59,9 +57,7 @@ export const EditFriendScreen = ({
         value={lastSeen}
         autoComplete="off"
         placeholder="MM/DD/YYYY"
-        onChangeText={(lastSeen) =>
-          setLastSeen(moment(lastSeen, "MM/DD/YYYY").toISOString())
-        }
+        onChangeText={setLastSeen}
       />
       <TextInput
         label="Days per contact"

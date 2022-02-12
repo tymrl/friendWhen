@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Appbar } from "react-native-paper";
@@ -12,17 +12,15 @@ export const FriendListScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "FriendListScreen">) => {
   const [friends, setFriends] = useState<Friend[]>([]);
-  useEffect(() => {
-    const getFriends = async () => {
-      const friendString = await AsyncStorage.getItem("friends");
-      if (friendString) {
-        setFriends(JSON.parse(friendString));
-      } else {
-        setFriends(mockData);
-      }
-    };
-    getFriends().catch(console.error);
-  }, []);
+  const getFriends = async () => {
+    const friendString = await AsyncStorage.getItem("friends");
+    if (friendString) {
+      setFriends(JSON.parse(friendString));
+    } else {
+      setFriends(mockData);
+    }
+  };
+  getFriends().catch(console.error);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: "Friends" });

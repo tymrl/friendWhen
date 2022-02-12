@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, SafeAreaView, Text, View } from "react-native";
-import { TextInput } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, SafeAreaView } from "react-native";
+import { TextInput, Button } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../App";
 import moment from "moment";
+import { Friend, makeFriendId } from "./Friend";
 
 export const EditFriendScreen = ({
   route,
@@ -12,10 +14,37 @@ export const EditFriendScreen = ({
   const [name, setName] = useState("New friend");
   const [lastSeen, setLastSeen] = useState(moment().format("MM/DD/YYYY"));
   const [daysPerContact, setDaysPerContact] = useState(30);
+  const [friends, setFriends] = useState<Friend[]>([]);
+
+  useEffect(() => {
+    const getFriends = async () => {
+      const friendString = await AsyncStorage.getItem("friends");
+      if (friendString) {
+        setFriends(JSON.parse(friendString));
+      } else {
+        console.error(
+          "No friends data saved when navigating to EditFriendScreen"
+        );
+      }
+    };
+    getFriends().catch(console.error);
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: "Add new friend" });
   }, [navigation]);
+
+  const saveFriend = () => {
+    const newFriends = [...friends];
+    newFriends.push({
+      name,
+      lastSeen,
+      daysPerContact,
+      id: makeFriendId(),
+    });
+    AsyncStorage.setItem("friends", JSON.stringify(newFriends));
+    navigation.navigate("FriendListScreen");
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -41,6 +70,9 @@ export const EditFriendScreen = ({
         autoComplete="off"
         keyboardType="numeric"
       />
+      <Button mode="contained" style={styles.button} onPress={saveFriend}>
+        Save
+      </Button>
     </SafeAreaView>
   );
 };
@@ -50,4 +82,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+  button: { width: "30%", alignSelf: "center", margin: "3%" },
 });

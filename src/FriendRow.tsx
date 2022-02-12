@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
-import { Friend, periodsElapsed } from "./Friend";
+import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import moment from "moment";
+import { Friend, periodsElapsed } from "./Friend";
 
 const rowColor = (periodsElapsed: number): string => {
   let red: number;
@@ -51,6 +52,34 @@ const LeftActions = (
   );
 };
 
+const RightActions = (
+  progress: Animated.AnimatedInterpolation,
+  dragX: Animated.AnimatedInterpolation
+) => {
+  const scale = dragX.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+  return (
+    <RectButton
+      style={{
+        backgroundColor: "green",
+        justifyContent: "center",
+      }}
+    >
+      <Animated.Text
+        style={{
+          paddingHorizontal: 10,
+          transform: [{ scale }],
+        }}
+      >
+        ✏
+      </Animated.Text>
+    </RectButton>
+  );
+};
+
 interface FriendRowProps {
   friend: Friend;
   updateFriend: (friend: Friend) => void;
@@ -83,6 +112,7 @@ export const FriendRow = (props: FriendRowProps) => {
       // when lastSeen changes
       key={props.friend.lastSeen}
       renderLeftActions={LeftActions}
+      renderRightActions={RightActions}
       onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>

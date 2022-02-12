@@ -11,7 +11,7 @@ export const FriendListScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "FriendListScreen">) => {
-  const [friends, setFriends] = useState(mockData);
+  const [friends, setFriends] = useState<Friend[]>([]);
   useEffect(() => {
     const getFriends = async () => {
       const friendString = await AsyncStorage.getItem("friends");

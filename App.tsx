@@ -9,7 +9,6 @@ export default function App() {
   const updateFriend = (friend: Friend) => {
     const newFriends = [...friends];
     newFriends[newFriends.findIndex((f) => f.id === friend.id)] = friend;
-    newFriends.sort((a, b) => periodsElapsed(b) - periodsElapsed(a));
     setFriends(newFriends);
   };
 

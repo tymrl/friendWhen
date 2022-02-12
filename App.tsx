@@ -1,14 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Friend, periodsElapsed, mockData } from "./src/Friend";
 import { FriendRow } from "./src/FriendRow";
 
 export default function App() {
   const [friends, setFriends] = useState(mockData);
+  useEffect(() => {
+    const getFriends = async () => {
+      const friendString = await AsyncStorage.getItem("friends");
+      if (friendString) {
+        setFriends(JSON.parse(friendString));
+      } else {
+        setFriends(mockData);
+      }
+    };
+    getFriends().catch(console.error);
+  }, []);
 
   const updateFriend = (friend: Friend) => {
     const newFriends = [...friends];
     newFriends[newFriends.findIndex((f) => f.id === friend.id)] = friend;
+    AsyncStorage.setItem("friends", JSON.stringify(newFriends));
     setFriends(newFriends);
   };
 

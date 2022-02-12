@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Appbar } from "react-native-paper";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../App";
 import { Friend, periodsElapsed, mockData } from "./Friend";
 import { FriendRow } from "./FriendRow";
 
-export const FriendListScreen = ({ navigation }) => {
+export const FriendListScreen = ({
+  route,
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, "FriendListScreen">) => {
   const [friends, setFriends] = useState(mockData);
   useEffect(() => {
     const getFriends = async () => {
@@ -19,6 +24,10 @@ export const FriendListScreen = ({ navigation }) => {
     getFriends().catch(console.error);
   }, []);
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: "Friends" });
+  }, [navigation]);
+
   const updateFriend = (friend: Friend) => {
     const newFriends = [...friends];
     newFriends[newFriends.findIndex((f) => f.id === friend.id)] = friend;
@@ -31,9 +40,7 @@ export const FriendListScreen = ({ navigation }) => {
       <Appbar style={styles.appbar}>
         <Appbar.Action
           icon="account-plus"
-          onPress={() =>
-            navigation.navigate("EditFriendScreen", { name: "Add new friend" })
-          }
+          onPress={() => navigation.navigate("EditFriendScreen")}
         />
       </Appbar>
       <View style={styles.body}>

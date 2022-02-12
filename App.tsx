@@ -1,57 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Friend, periodsElapsed, mockData } from "./src/Friend";
-import { FriendRow } from "./src/FriendRow";
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import { FriendListScreen } from "./src/FriendListScreen";
+import { EditFriendScreen } from "./src/EditFriendScreen";
+
+export type RootStackParamList = {
+  FriendListScreen: undefined;
+  EditFriendScreen: undefined;
+};
+
+export const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [friends, setFriends] = useState(mockData);
-  useEffect(() => {
-    const getFriends = async () => {
-      const friendString = await AsyncStorage.getItem("friends");
-      if (friendString) {
-        setFriends(JSON.parse(friendString));
-      } else {
-        setFriends(mockData);
-      }
-    };
-    getFriends().catch(console.error);
-  }, []);
-
-  const updateFriend = (friend: Friend) => {
-    const newFriends = [...friends];
-    newFriends[newFriends.findIndex((f) => f.id === friend.id)] = friend;
-    AsyncStorage.setItem("friends", JSON.stringify(newFriends));
-    setFriends(newFriends);
-  };
-
   return (
-    <SafeAreaView style={styles.root}>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={friends.sort((a, b) => periodsElapsed(b) - periodsElapsed(a))}
-          renderItem={({ item }) => FriendRow({ friend: item, updateFriend })}
-        />
-        <View style={styles.spacer} />
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="FriendListScreen" component={FriendListScreen} />
+        <Stack.Screen name="EditFriendScreen" component={EditFriendScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    display: "flex",
-    flexDirection: "row",
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  listContainer: {
-    display: "flex",
-    flex: 1,
-  },
-  spacer: {
-    flex: 1,
-  },
-});

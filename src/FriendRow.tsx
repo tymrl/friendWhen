@@ -79,7 +79,8 @@ export const FriendRow = (props: FriendRowProps) => {
 
   return (
     <Swipeable
-      // We use lastSeen for a key instead of ID so that the Swipeable closes when lastSeen changes
+      // We use lastSeen for a key instead of ID so that the Swipeable closes
+      // when lastSeen changes
       key={props.friend.lastSeen}
       renderLeftActions={LeftActions}
       onSwipeableLeftOpen={() => updateLastSeen()}

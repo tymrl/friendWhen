@@ -23,69 +23,69 @@ const rowColor = (periodsElapsed: number): string => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-const LeftActions = (
-  progress: Animated.AnimatedInterpolation,
-  dragX: Animated.AnimatedInterpolation
-) => {
-  const scale = dragX.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
-  });
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "blue",
-        justifyContent: "center",
-      }}
-    >
-      <Animated.Text
-        style={{
-          paddingHorizontal: 10,
-          transform: [{ scale }],
-        }}
-      >
-        ✔️
-      </Animated.Text>
-    </View>
-  );
-};
-
-const RightActions = (
-  progress: Animated.AnimatedInterpolation,
-  dragX: Animated.AnimatedInterpolation
-) => {
-  const scale = dragX.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
-  return (
-    <RectButton
-      style={{
-        backgroundColor: "green",
-        justifyContent: "center",
-      }}
-    >
-      <Animated.Text
-        style={{
-          paddingHorizontal: 10,
-          transform: [{ scale }],
-        }}
-      >
-        ✏
-      </Animated.Text>
-    </RectButton>
-  );
-};
-
 interface FriendRowProps {
   friend: Friend;
   updateFriend: (friend: Friend) => void;
 }
 
 export const FriendRow = (props: FriendRowProps) => {
+  const LeftActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation
+  ) => {
+    const scale = dragX.interpolate({
+      inputRange: [0, 100],
+      outputRange: [0, 1],
+      extrapolate: "clamp",
+    });
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "blue",
+          justifyContent: "center",
+        }}
+      >
+        <Animated.Text
+          style={{
+            paddingHorizontal: 10,
+            transform: [{ scale }],
+          }}
+        >
+          ✔️
+        </Animated.Text>
+      </View>
+    );
+  };
+
+  const RightActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation
+  ) => {
+    const scale = dragX.interpolate({
+      inputRange: [0, 100],
+      outputRange: [1, 0],
+      extrapolate: "clamp",
+    });
+    return (
+      <RectButton
+        style={{
+          backgroundColor: "green",
+          justifyContent: "center",
+        }}
+      >
+        <Animated.Text
+          style={{
+            paddingHorizontal: 10,
+            transform: [{ scale }],
+          }}
+        >
+          ✏
+        </Animated.Text>
+      </RectButton>
+    );
+  };
+
   const styles = StyleSheet.create({
     row: {
       flex: 1,

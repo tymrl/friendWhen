@@ -47,6 +47,14 @@ export const EditFriendScreen = ({
     navigation.navigate("FriendListScreen");
   };
 
+  const deleteFriend = () => {
+    AsyncStorage.setItem(
+      "friends",
+      JSON.stringify([...friends].filter((f) => f.id != friend.id))
+    );
+    navigation.navigate("FriendListScreen");
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <TextInput
@@ -71,6 +79,9 @@ export const EditFriendScreen = ({
       />
       <Button mode="contained" style={styles.button} onPress={saveFriend}>
         Save
+      </Button>
+      <Button mode="contained" style={styles.button} onPress={deleteFriend}>
+        Delete
       </Button>
     </SafeAreaView>
   );

@@ -69,7 +69,7 @@ export const mockData = [
     daysPerContact: 4,
   },
   {
-    name: "Aviendha",
+    name: "Aviendha of the Nine Valleys sept of the Taardad Aiel",
     id: makeFriendId(),
     lastSeen: moment().subtract(1, "days").toISOString(),
     daysPerContact: 4,
@@ -79,5 +79,35 @@ export const mockData = [
     id: makeFriendId(),
     lastSeen: moment().subtract(17, "days").toISOString(),
     daysPerContact: 8,
+  },
+  {
+    name: "Faile Bashere",
+    id: makeFriendId(),
+    lastSeen: moment().subtract(12, "days").toISOString(),
+    daysPerContact: 16,
+  },
+  {
+    name: "Moiraine Damodred",
+    id: makeFriendId(),
+    lastSeen: moment().subtract(12, "days").toISOString(),
+    daysPerContact: 8,
+  },
+  {
+    name: "al'Lan Mandragoran",
+    id: makeFriendId(),
+    lastSeen: moment().subtract(4, "days").toISOString(),
+    daysPerContact: 8,
+  },
+  {
+    name: "Siuan Sanche",
+    id: makeFriendId(),
+    lastSeen: moment().subtract(11, "days").toISOString(),
+    daysPerContact: 8,
+  },
+  {
+    name: "Loial son of Arent son of Halan",
+    id: makeFriendId(),
+    lastSeen: moment().subtract(180, "days").toISOString(),
+    daysPerContact: 365,
   },
 ];

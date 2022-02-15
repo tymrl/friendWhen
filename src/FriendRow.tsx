@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
-import { Friend, periodsElapsed } from "./Friend";
+import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import moment from "moment";
+import { Friend, periodsElapsed } from "./Friend";
 
 const rowColor = (periodsElapsed: number): string => {
   let red: number;
@@ -22,41 +23,71 @@ const rowColor = (periodsElapsed: number): string => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-const LeftActions = (
-  progress: Animated.AnimatedInterpolation,
-  dragX: Animated.AnimatedInterpolation
-) => {
-  const scale = dragX.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
-  });
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "blue",
-        justifyContent: "center",
-      }}
-    >
-      <Animated.Text
-        style={{
-          paddingHorizontal: 10,
-          transform: [{ scale }],
-        }}
-      >
-        ✔️
-      </Animated.Text>
-    </View>
-  );
-};
-
 interface FriendRowProps {
   friend: Friend;
   updateFriend: (friend: Friend) => void;
+  navigateToEditScreen: (friend: Friend) => void;
 }
 
 export const FriendRow = (props: FriendRowProps) => {
+  const LeftActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation
+  ) => {
+    const scale = dragX.interpolate({
+      inputRange: [0, 100],
+      outputRange: [0, 1],
+      extrapolate: "clamp",
+    });
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "blue",
+          justifyContent: "center",
+        }}
+      >
+        <Animated.Text
+          style={{
+            paddingHorizontal: 10,
+            transform: [{ scale }],
+          }}
+        >
+          ✔️
+        </Animated.Text>
+      </View>
+    );
+  };
+
+  const RightActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation
+  ) => {
+    const scale = dragX.interpolate({
+      inputRange: [0, 100],
+      outputRange: [1, 0],
+      extrapolate: "clamp",
+    });
+    return (
+      <RectButton
+        style={{
+          backgroundColor: "green",
+          justifyContent: "center",
+        }}
+        onPress={() => props.navigateToEditScreen(props.friend)}
+      >
+        <Animated.Text
+          style={{
+            paddingHorizontal: 10,
+            transform: [{ scale }],
+          }}
+        >
+          ✏
+        </Animated.Text>
+      </RectButton>
+    );
+  };
+
   const styles = StyleSheet.create({
     row: {
       flex: 1,
@@ -79,9 +110,11 @@ export const FriendRow = (props: FriendRowProps) => {
 
   return (
     <Swipeable
-      // We use lastSeen for a key instead of ID so that the Swipeable closes when lastSeen changes
+      // We use lastSeen for a key instead of ID so that the Swipeable closes
+      // when lastSeen changes
       key={props.friend.lastSeen}
       renderLeftActions={LeftActions}
+      renderRightActions={RightActions}
       onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>

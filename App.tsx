@@ -1,15 +1,13 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FriendListScreen } from "./src/FriendListScreen";
 import { EditFriendScreen } from "./src/EditFriendScreen";
+import { Friend } from "./src/Friend";
 
 export type RootStackParamList = {
   FriendListScreen: undefined;
-  EditFriendScreen: undefined;
+  EditFriendScreen: { friend: Friend; friends: Friend[] };
 };
 
 export const Stack = createNativeStackNavigator();

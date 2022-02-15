@@ -5,42 +5,45 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../App";
 import moment from "moment";
-import { Friend, makeFriendId } from "./Friend";
+import { Friend } from "./Friend";
 
 export const EditFriendScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "EditFriendScreen">) => {
-  const [name, setName] = useState("New friend");
-  const [lastSeen, setLastSeen] = useState(moment().format("MM/DD/YYYY"));
-  const [daysPerContact, setDaysPerContact] = useState(30);
-  const [friends, setFriends] = useState<Friend[]>([]);
+  const [friend, setFriend] = useState<Friend>(route.params.friend);
+  const [friends, setFriends] = useState<Friend[]>(route.params.friends);
+  const [lastSeenString, setLastSeenString] = useState(
+    moment(route.params.friend.lastSeen).format("MM/DD/YYYY")
+  );
+  const [daysPerContactString, setDaysPerContactString] = useState(
+    route.params.friend.daysPerContact.toString()
+  );
 
-  const getFriends = async () => {
-    const friendString = await AsyncStorage.getItem("friends");
-    if (friendString) {
-      setFriends(JSON.parse(friendString));
+  useEffect(() => {
+    setFriend({
+      ...friend,
+      lastSeen: moment(lastSeenString, "MM/DD/YYYY").toISOString(),
+      daysPerContact: parseInt(daysPerContactString),
+    });
+  }, [lastSeenString, daysPerContactString]);
+  useEffect(() => {
+    const newFriends = [...friends];
+    const friendIndex = friends.findIndex((f) => f.id === friend.id);
+    if (friendIndex >= 0) {
+      newFriends.splice(friendIndex, 1, friend);
     } else {
-      console.error(
-        "No friends data saved when navigating to EditFriendScreen"
-      );
+      newFriends.push(friend);
     }
-  };
-  getFriends().catch(console.error);
+    setFriends(newFriends);
+  }, [friend.name, friend.lastSeen, friend.daysPerContact]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: "Add new friend" });
   }, [navigation]);
 
   const saveFriend = () => {
-    const newFriends = [...friends];
-    newFriends.push({
-      name,
-      lastSeen: moment(lastSeen, "MM/DD/YYYY").toISOString(),
-      daysPerContact,
-      id: makeFriendId(),
-    });
-    AsyncStorage.setItem("friends", JSON.stringify(newFriends));
+    AsyncStorage.setItem("friends", JSON.stringify(friends));
     navigation.navigate("FriendListScreen");
   };
 
@@ -48,21 +51,21 @@ export const EditFriendScreen = ({
     <SafeAreaView style={styles.root}>
       <TextInput
         label="Name"
-        value={name}
+        value={friend.name}
         autoComplete="off"
-        onChangeText={setName}
+        onChangeText={(name) => setFriend({ ...friend, name })}
       />
       <TextInput
         label="Last seen"
-        value={lastSeen}
+        value={lastSeenString}
         autoComplete="off"
         placeholder="MM/DD/YYYY"
-        onChangeText={setLastSeen}
+        onChangeText={setLastSeenString}
       />
       <TextInput
         label="Days per contact"
-        value={daysPerContact.toString()}
-        onChangeText={(dps) => setDaysPerContact(parseInt(dps))}
+        value={daysPerContactString}
+        onChangeText={setDaysPerContactString}
         autoComplete="off"
         keyboardType="numeric"
       />

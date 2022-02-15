@@ -101,6 +101,7 @@ export const FriendRow = (props: FriendRowProps) => {
     },
     lastSeenDate: {
       fontSize: 24,
+      marginLeft: "2%",
     },
   });
 
@@ -118,7 +119,9 @@ export const FriendRow = (props: FriendRowProps) => {
       onSwipeableLeftOpen={() => updateLastSeen()}
     >
       <View style={styles.row}>
-        <Text style={styles.friendName}>{props.friend.name}</Text>
+        <Text style={styles.friendName} numberOfLines={1}>
+          {props.friend.name}
+        </Text>
         <Text style={styles.lastSeenDate}>
           {moment(props.friend.lastSeen).format("MMM D")}
         </Text>

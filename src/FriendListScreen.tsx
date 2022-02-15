@@ -1,30 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Appbar } from "react-native-paper";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../App";
-import { Friend, periodsElapsed, mockData } from "./Friend";
+import { Friend, periodsElapsed, mockData, makeFriendId } from "./Friend";
 import { FriendRow } from "./FriendRow";
+import moment from "moment";
 
 export const FriendListScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "FriendListScreen">) => {
   const [friends, setFriends] = useState<Friend[]>([]);
-  const getFriends = async () => {
-    const friendString = await AsyncStorage.getItem("friends");
-    if (friendString) {
-      setFriends(JSON.parse(friendString));
-    } else {
-      setFriends(mockData);
-    }
-  };
-  getFriends().catch(console.error);
+  useEffect(() => {
+    const getFriends = async () => {
+      const friendString = await AsyncStorage.getItem("friends");
+      if (friendString) {
+        setFriends(JSON.parse(friendString));
+      } else {
+        setFriends(mockData);
+        AsyncStorage.setItem("friends", JSON.stringify(mockData));
+      }
+    };
+    getFriends().catch(console.error);
+  });
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: "Friends" });
   }, [navigation]);
+
+  const navigateToEditScreen = (friend: Friend) =>
+    navigation.navigate("EditFriendScreen", { friend, friends });
 
   const updateFriend = (friend: Friend) => {
     const newFriends = [...friends];
@@ -38,14 +45,23 @@ export const FriendListScreen = ({
       <Appbar style={styles.appbar}>
         <Appbar.Action
           icon="account-plus"
-          onPress={() => navigation.navigate("EditFriendScreen")}
+          onPress={() =>
+            navigateToEditScreen({
+              id: makeFriendId(),
+              name: "New friend",
+              lastSeen: moment().toISOString(),
+              daysPerContact: 30,
+            })
+          }
         />
       </Appbar>
       <View style={styles.body}>
         <View style={styles.listContainer}>
           <FlatList
             data={friends.sort((a, b) => periodsElapsed(b) - periodsElapsed(a))}
-            renderItem={({ item }) => FriendRow({ friend: item, updateFriend })}
+            renderItem={({ item }) =>
+              FriendRow({ friend: item, updateFriend, navigateToEditScreen })
+            }
           />
           <View style={styles.spacer} />
         </View>

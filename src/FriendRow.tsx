@@ -26,6 +26,7 @@ const rowColor = (periodsElapsed: number): string => {
 interface FriendRowProps {
   friend: Friend;
   updateFriend: (friend: Friend) => void;
+  navigateToEditScreen: (friend: Friend) => void;
 }
 
 export const FriendRow = (props: FriendRowProps) => {
@@ -73,6 +74,7 @@ export const FriendRow = (props: FriendRowProps) => {
           backgroundColor: "green",
           justifyContent: "center",
         }}
+        onPress={() => props.navigateToEditScreen(props.friend)}
       >
         <Animated.Text
           style={{

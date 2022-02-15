@@ -81,7 +81,7 @@ export const mockData = [
     daysPerContact: 8,
   },
   {
-    name: "Perrin Aybara",
+    name: "Faile Bashere",
     id: makeFriendId(),
     lastSeen: moment().subtract(12, "days").toISOString(),
     daysPerContact: 16,
